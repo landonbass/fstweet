@@ -27,6 +27,13 @@ Target "Build" (fun _ ->
     |> Log "AppBuild-Output: "
 )
 
+let noFilter = fun _ -> true
+Target "Views" (fun _ ->
+  let srcDir = "./src/FsTweet.Web/views"
+  let targetDir = combinePaths buildDir "views"
+  CopyDir targetDir srcDir noFilter
+)
+
 Target "Run" (fun _ ->
   ExecProcess
     (fun info -> info.FileName <- "./build/FsTweet.Web.exe")
@@ -37,6 +44,7 @@ Target "Run" (fun _ ->
 // Build order
 "Clean"
   ==> "Build"
+  ==> "Views"
   ==> "Run"
 
 // start build
