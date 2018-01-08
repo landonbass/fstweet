@@ -15,10 +15,17 @@ let appReferences  =
 
 // version info
 let version = "0.1"  // or retrieve from CI server
-
+let noFilter = fun _ -> true
 // Targets
 Target "Clean" (fun _ ->
     CleanDirs [buildDir; deployDir]
+)
+
+let copyToBuildDir srcDir targetDirName =
+  let targetDir = combinePaths buildDir targetDirName
+  CopyDir targetDir srcDir noFilter
+Target "Assets" (fun _ ->
+  copyToBuildDir "./src/FsTweet.Web/assets" "assets"
 )
 
 Target "Build" (fun _ ->
@@ -27,7 +34,6 @@ Target "Build" (fun _ ->
     |> Log "AppBuild-Output: "
 )
 
-let noFilter = fun _ -> true
 Target "Views" (fun _ ->
   let srcDir = "./src/FsTweet.Web/views"
   let targetDir = combinePaths buildDir "views"
@@ -45,6 +51,7 @@ Target "Run" (fun _ ->
 "Clean"
   ==> "Build"
   ==> "Views"
+  ==> "Assets"
   ==> "Run"
 
 // start build
