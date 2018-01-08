@@ -27,16 +27,17 @@ Target "Build" (fun _ ->
     |> Log "AppBuild-Output: "
 )
 
-Target "Deploy" (fun _ ->
-    !! (buildDir + "/**/*.*")
-    -- "*.zip"
-    |> Zip buildDir (deployDir + "ApplicationName." + version + ".zip")
+Target "Run" (fun _ ->
+  ExecProcess
+    (fun info -> info.FileName <- "./build/FsTweet.Web.exe")
+    (System.TimeSpan.FromDays 1.)
+  |> ignore
 )
 
 // Build order
 "Clean"
   ==> "Build"
-  ==> "Deploy"
+  ==> "Run"
 
 // start build
 RunTargetOrDefault "Build"
