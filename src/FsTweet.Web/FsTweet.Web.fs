@@ -32,6 +32,7 @@ let main argv =
         choose [
             serveAssets
             path "/" >=> page "guest/home.liquid" ""
+            UserSignup.Suave.webPart ()
         ]
     startWebServer defaultConfig app
     0
