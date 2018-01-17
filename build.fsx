@@ -21,7 +21,7 @@ let version = "0.1"  // or retrieve from CI server
 let noFilter = fun _ -> true
 
 let connString =
-  @"Server=127.0.0.1;Port=5432;Database=FsTweet;User Id=postgres;Password=test;"
+  @"Server=127.0.0.1;Port=5432;Database=FsTweet;User Id=FsTweet;Password=FsTweet;" //bad to save these in git but following the book :/
 let dbConnection = ConnectionString (connString, DatabaseProvider.PostgreSQL)
 let migrationsAssembly =
   combinePaths buildDir "FsTweet.Db.Migrations.dll"
@@ -68,6 +68,8 @@ Target "BuildMigrations" (fun _ ->
 
 // Build order
 "Clean"
+  ==> "BuildMigrations"
+  ==> "RunMigrations"
   ==> "Build"
   ==> "Views"
   ==> "Assets"
